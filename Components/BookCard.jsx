@@ -1,60 +1,122 @@
 'use client'
-import { Heart, Star, BookOpen, Eye } from 'lucide-react'
+import { Heart, Star } from 'lucide-react'
 
 export default function BookCard({ book, isFavorite, onToggleFav, onClick }) {
   return (
-    <div onClick={onClick}
-         className="book-card cursor-pointer rounded-2xl overflow-hidden border"
-         style={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border)' }}>
-
+    <div
+      onClick={onClick}
+      style={{
+        backgroundColor: 'var(--card-bg)',
+        border: '1px solid var(--border)',
+        borderRadius: 12,
+        overflow: 'hidden',
+        cursor: 'pointer',
+        transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+      onMouseEnter={e => {
+        e.currentTarget.style.transform = 'translateY(-4px)'
+        e.currentTarget.style.boxShadow = '0 12px 32px rgba(244,63,94,0.15)'
+      }}
+      onMouseLeave={e => {
+        e.currentTarget.style.transform = 'translateY(0)'
+        e.currentTarget.style.boxShadow = 'none'
+      }}
+    >
       {/* Cover */}
-      <div className="relative h-52 overflow-hidden"
-           style={{ background: 'linear-gradient(135deg, #fce7f3, #fecdd3)' }}>
+      <div style={{
+        position: 'relative',
+        height: 200,
+        background: 'linear-gradient(135deg, #fce7f3, #fecdd3)',
+        overflow: 'hidden',
+        flexShrink: 0,
+      }}>
         <img
-          src={book.thumbnail}
+          src={
+            book.thumbnail ||
+            `https://via.placeholder.com/160x200/fce7f3/f43f5e?text=${encodeURIComponent(book.title.slice(0, 6))}`
+          }
           alt={book.title}
-          className="w-full h-full object-contain p-2 transition-transform duration-300 hover:scale-105"
-          onError={e => { e.target.src = `https://via.placeholder.com/200x280/fce7f3/f43f5e?text=${encodeURIComponent(book.title.slice(0,10))}` }}
+          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+          onError={e => {
+            e.target.src = `https://via.placeholder.com/160x200/fce7f3/f43f5e?text=${encodeURIComponent(book.title.slice(0, 6))}`
+          }}
         />
-        {/* Fav button */}
-        <button
-          onClick={e => { e.stopPropagation(); onToggleFav(book) }}
-          className="absolute top-3 right-3 p-2 rounded-full backdrop-blur-sm transition-all hover:scale-110"
-          style={{ backgroundColor: 'rgba(255,255,255,0.85)' }}>
-          <Heart size={16} fill={isFavorite ? '#f43f5e' : 'none'}
-                 style={{ color: '#f43f5e' }} />
-        </button>
-        {/* Rating badge */}
+
+        {/* Rating badge — bottom left */}
         {book.rating && (
-          <div className="absolute bottom-3 left-3 flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium backdrop-blur-sm"
-               style={{ backgroundColor: 'rgba(255,255,255,0.85)', color: '#92400e' }}>
-            <Star size={11} fill="#f59e0b" color="#f59e0b" />
-            {book.rating.toFixed(1)}
+          <div style={{
+            position: 'absolute', bottom: 8, left: 8,
+            display: 'flex', alignItems: 'center', gap: 3,
+            backgroundColor: 'rgba(0,0,0,0.65)',
+            borderRadius: 6, padding: '3px 7px',
+          }}>
+            <Star size={10} fill="#f59e0b" color="#f59e0b" />
+            <span style={{ fontSize: 11, fontWeight: 600, color: '#fff' }}>
+              {book.rating.toFixed(1)}
+            </span>
           </div>
         )}
       </div>
 
-      {/* Info */}
-      <div className="p-4">
-        <h3 className="font-semibold text-sm leading-tight mb-1 line-clamp-2"
-            style={{ color: 'var(--text-primary)' }}>
+      {/* Info row */}
+      <div style={{
+        padding: '12px 14px',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 4,
+        flex: 1,
+      }}>
+        <h3 style={{
+          fontSize: 13,
+          fontWeight: 600,
+          color: 'var(--text-primary)',
+          lineHeight: 1.35,
+          display: '-webkit-box',
+          WebkitLineClamp: 2,
+          WebkitBoxOrient: 'vertical',
+          overflow: 'hidden',
+          margin: 0,
+        }}>
           {book.title}
         </h3>
-        <p className="text-xs mb-3 line-clamp-1" style={{ color: 'var(--text-secondary)' }}>
-          {book.authors.join(', ')}
-        </p>
 
-        {/* Meta */}
-        <div className="flex items-center justify-between">
-          {book.pageCount && (
-            <span className="flex items-center gap-1 text-xs" style={{ color: 'var(--text-secondary)' }}>
-              <BookOpen size={11} /> {book.pageCount}p
-            </span>
-          )}
-          <span className="flex items-center gap-1 text-xs px-2 py-1 rounded-full"
-                style={{ backgroundColor: 'var(--border)', color: 'var(--accent)' }}>
-            <Eye size={10} /> View
-          </span>
+        {/* Author + Heart in one row */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginTop: 'auto',
+          paddingTop: 6,
+        }}>
+          <p style={{
+            fontSize: 12,
+            color: 'var(--text-secondary)',
+            margin: 0,
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            maxWidth: '75%',
+          }}>
+            {book.authors[0]}
+          </p>
+
+          <button
+            onClick={e => { e.stopPropagation(); onToggleFav(book) }}
+            style={{
+              background: 'none', border: 'none', cursor: 'pointer',
+              padding: 4, borderRadius: 6,
+              display: 'flex', alignItems: 'center',
+              flexShrink: 0,
+            }}
+          >
+            <Heart
+              size={15}
+              fill={isFavorite ? '#f43f5e' : 'none'}
+              color={isFavorite ? '#f43f5e' : 'var(--text-secondary)'}
+            />
+          </button>
         </div>
       </div>
     </div>

@@ -1,41 +1,55 @@
 @import "tailwindcss";
 
 :root {
-  --bg-primary:    #fff1f2;
+  --bg-primary:    #f9f4f5;
   --bg-secondary:  #ffffff;
-  --text-primary:  #1f2937;
+  --text-primary:  #18111a;
   --text-secondary:#6b7280;
   --accent:        #f43f5e;
   --card-bg:       #ffffff;
-  --border:        #fecdd3;
+  --border:        #e8d5da;
 }
 
 .dark {
-  --bg-primary:    #1a0a0e;
-  --bg-secondary:  #2d1018;
-  --text-primary:  #f9fafb;
-  --text-secondary:#d1d5db;
-  --accent:        #fb7185;
-  --card-bg:       #2d1018;
-  --border:        #4a1020;
+  --bg-primary:    #130a0e;
+  --bg-secondary:  #1c1017;
+  --text-primary:  #f3eef0;
+  --text-secondary:#9ca3af;
+  --accent:        #f43f5e;
+  --card-bg:       #231319;
+  --border:        #2e1820;
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
-  font-family: 'Inter', sans-serif;
+  font-family: 'Inter', -apple-system, sans-serif;
   transition: background-color 0.3s ease, color 0.3s ease;
+  -webkit-font-smoothing: antialiased;
 }
 
+/* Scrollbar hide */
 .scrollbar-hide::-webkit-scrollbar { display: none; }
 .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 
-/* Pink glow card hover */
-.book-card:hover {
-  box-shadow: 0 8px 32px rgba(244, 63, 94, 0.18);
-  transform: translateY(-4px);
+/* Hide nav on mobile */
+@media (max-width: 640px) {
+  .hide-mobile { display: none !important; }
 }
 
-.book-card { transition: all 0.3s ease; }
+/* Fade in */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in { animation: fadeIn 0.35s ease forwards; }
+
+/* Spin */
+@keyframes spin { to { transform: rotate(360deg); } }
+.animate-spin { animation: spin 0.8s linear infinite; }
+
+/* Pulse for skeleton */
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+.animate-pulse { animation: pulse 1.5s ease-in-out infinite; }
