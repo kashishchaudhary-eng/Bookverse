@@ -1,5 +1,5 @@
 import './globals.css'
-import { ThemeProvider } from '../components/ThemeProvider'
+import { ThemeProvider } from '../Components/ThemeProvider'
 
 export const metadata = {
   title: 'BookVerse — Discover Your Next Read',
